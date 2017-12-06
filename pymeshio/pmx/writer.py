@@ -173,43 +173,66 @@ class Writer(common.BinaryWriter):
             self.write_text(m.english_name)
             self.write_int(m.panel, 1)
             self.write_int(m.morph_type, 1)
+            # if m.morph_type!=1:
+            #     continue
             if m.morph_type==0:
-                # todo
-                raise common.WriteException(
-                        "not implemented GroupMorph")
+                self.write_int(len(m.offsets), 4)
+                for o in m.offsets:
+                    self.read_morph_index(o.morph_index)
+                    self.read_float(o.value)
+                # # todo
+                # raise common.WriteException(
+                #         "not implemented GroupMorph")
             elif m.morph_type==1:
                 self.write_int(len(m.offsets), 4)
                 for o in m.offsets:
                     self.write_vertex_index(o.vertex_index)
                     self.write_vector3(o.position_offset)
             elif m.morph_type==2:
-                # todo
-                raise common.WriteException(
-                        "not implemented BoneMorph")
+                self.write_int(len(m.offsets), 4)
+                for o in m.offsets:
+                    self.write_bone_index(o.bone_index)
+                    self.write_vector3(o.position)
+                    self.write_quaternion(o.rotation)
             elif m.morph_type==3:
-                # todo
-                raise common.WriteException(
-                        "not implemented UvMorph")
+                self.write_int(len(m.offsets), 4)
+                for o in m.offsets:
+                    self.read_vertex_index(o.vertex_index)
+                    self.read_vector4(o.uv)
             elif m.morph_type==4:
-                # todo
-                raise common.WriteException(
-                        "not implemented extended UvMorph1")
+                self.write_int(len(m.offsets), 4)
+                for o in m.offsets:
+                    self.read_vertex_index(o.vertex_index)
+                    self.read_vector4(o.uv)
             elif m.morph_type==5:
-                # todo
-                raise common.WriteException(
-                        "not implemented extended UvMorph2")
+                self.write_int(len(m.offsets), 4)
+                for o in m.offsets:
+                    self.read_vertex_index(o.vertex_index)
+                    self.read_vector4(o.uv)
             elif m.morph_type==6:
-                # todo
-                raise common.WriteException(
-                        "not implemented extended UvMorph3")
+                self.write_int(len(m.offsets), 4)
+                for o in m.offsets:
+                    self.read_vertex_index(o.vertex_index)
+                    self.read_vector4(o.uv)
             elif m.morph_type==7:
-                # todo
-                raise common.WriteException(
-                        "not implemented extended UvMorph4")
+                self.write_int(len(m.offsets), 4)
+                for o in m.offsets:
+                    self.read_vertex_index(o.vertex_index)
+                    self.read_vector4(o.uv)
             elif m.morph_type==8:
-                # todo
-                raise common.WriteException(
-                        "not implemented extended MaterialMorph")
+                self.write_int(len(m.data), 4)
+                for o in m.data:
+                    self.write_material_index(o.material_index)
+                    self.write_int(o.calc_mode, 1)
+                    self.write_rgba(o.diffuse)
+                    self.write_rgb(o.specular)
+                    self.write_float(o.specular_factor)
+                    self.write_rgb(o.ambient)
+                    self.write_rgba(o.edge_color)
+                    self.write_float(o.edge_size)
+                    self.write_rgba(o.texture_factor)
+                    self.write_rgba(o.sphere_texture_factor)
+                    self.write_rgba(o.toon_texture_factor)
             else:
                 raise common.WriteException(
                         "unknown morph type: {0}".format(m.morph_type))
